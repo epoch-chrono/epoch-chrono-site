@@ -54,6 +54,110 @@ public/
 └── favicon.*       # favicon.svg, favicon.ico, favicon-512.png
 ```
 
+## Updating content
+
+### Blog post
+
+Create a new file in `src/content/blog/`:
+
+```sh
+touch src/content/blog/YYYY-MM-DD-slug-do-post.md
+```
+
+Frontmatter mínimo:
+
+```yaml
+---
+title: "Título do post"
+description: "Resumo curto"
+pubDate: 2026-03-11
+tags: ["sre", "kubernetes"]
+draft: false
+---
+```
+
+See [`.mind/CONTENT_CONVENTIONS.md`](.mind/CONTENT_CONVENTIONS.md) for full schema.
+
+---
+
+### TIL (Today I Learned)
+
+Create a new file in `src/content/til/`:
+
+```sh
+touch src/content/til/YYYY-MM-DD-slug.md
+```
+
+Frontmatter mínimo:
+
+```yaml
+---
+title: "O que aprendi hoje"
+pubDate: 2026-03-11
+tags: ["linux", "git"]
+---
+```
+
+---
+
+### /now page
+
+Edit `src/pages/now.astro` directly — it's a static page, no content collection.
+
+Update the `updatedAt` const at the top and the content inside the `<section>` blocks:
+
+```astro
+const updatedAt = '2026-03';  // ← atualizar aqui
+```
+
+Add or edit sections in the format:
+
+```astro
+<section class="space-y-2">
+  <h2 ...>trabalho</h2>
+  <p>Descrição do que está acontecendo agora.</p>
+</section>
+```
+
+---
+
+### /uses page
+
+Edit `src/pages/uses.astro` directly — também é página estática.
+
+Update the `stack` array at the top of the file:
+
+```astro
+const stack = [
+  { category: 'infra & cloud', items: ['AWS', 'Cloudflare', 'Vercel'] },
+  { category: 'editor & terminal', items: ['Helix', 'Fish shell', 'Ghostty'] },
+  // adicionar ou remover categorias aqui
+];
+```
+
+---
+
+### Projects
+
+Create a new file in `src/content/projects/`:
+
+```sh
+touch src/content/projects/nome-do-projeto.md
+```
+
+Frontmatter mínimo:
+
+```yaml
+---
+title: "Nome do Projeto"
+description: "O que ele faz"
+url: "https://github.com/..."
+tags: ["go", "cli"]
+---
+```
+
+---
+
 ## Content collections
 
 | Collection | Path | Format |
