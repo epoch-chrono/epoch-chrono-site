@@ -1,1 +1,75 @@
 @import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  :root {
+    /* Fundos */
+    --color-bg-base: #0a0e1a;
+    --color-bg-surface: #0f1629;
+    --color-bg-elevated: #162040;
+
+    /* Texto */
+    --color-text-primary: #e8edf7;
+    --color-text-secondary: #8fa3c8;
+    --color-text-muted: #4a607f;
+
+    /* Acento ciano Epoch */
+    --color-accent: #00c8e0;
+    --color-accent-dim: #0090a8;
+    --color-accent-glow: #00c8e030;
+
+    /* Dourado âmbar */
+    --color-gold: #f0a830;
+    --color-gold-dim: #b07820;
+
+    /* Índigo */
+    --color-indigo: #2d1b6e;
+    --color-indigo-bright: #6b4fc8;
+
+    /* Semânticas */
+    --color-success: #00e896;
+    --color-warning: #f0a830;
+    --color-error: #e84060;
+    --color-border: #1e2d4a;
+
+    /* Tipografia */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  /* Light mode */
+  :root.light {
+    --color-bg-base: #f4f7fd;
+    --color-bg-surface: #ffffff;
+    --color-bg-elevated: #e8edf7;
+    --color-text-primary: #0a0e1a;
+    --color-text-secondary: #3a4f6e;
+    --color-text-muted: #7a95b8;
+    --color-accent: #0080a0;
+    --color-accent-dim: #005870;
+    --color-gold: #c07820;
+    --color-indigo-bright: #5040b0;
+    --color-border: #c8d8ee;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+  }
+
+  code, pre, kbd {
+    font-family: var(--font-mono);
+  }
+
+  /* Scrollbar minimalista */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg-base); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+}

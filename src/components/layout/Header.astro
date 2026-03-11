@@ -1,0 +1,41 @@
+---
+// Header.astro
+const navLinks = [
+  { href: '/blog', label: 'blog' },
+  { href: '/til', label: 'til' },
+  { href: '/projects', label: 'projects' },
+  { href: '/uses', label: 'uses' },
+  { href: '/now', label: 'now' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="w-full border-b border-[#1e2d4a]">
+  <nav class="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <a
+      href="/"
+      class="font-mono text-sm text-[#00c8e0] hover:text-[#e8edf7] transition-colors"
+    >
+      epoch-chrono
+    </a>
+
+    <ul class="flex items-center gap-5">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              'font-mono text-xs transition-colors',
+              currentPath.startsWith(href)
+                ? 'text-[#00c8e0]'
+                : 'text-[#8fa3c8] hover:text-[#e8edf7]',
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

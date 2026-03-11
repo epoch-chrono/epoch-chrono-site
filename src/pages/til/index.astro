@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import TilCard from '../../components/til/TilCard.astro';
+import { getPublishedTils } from '../../utils/content';
+
+const tils = await getPublishedTils();
+---
+
+<BaseLayout
+  title="til — epoch-chrono"
+  description="Today I Learned. Notas curtas sobre o que aprendi."
+>
+  <section class="space-y-6">
+    <header class="space-y-1">
+      <h1 class="text-2xl font-semibold tracking-tight text-[#e8edf7]">til</h1>
+      <p class="font-mono text-sm text-[#4a607f]">today i learned · {tils.length} entradas</p>
+    </header>
+
+    {tils.length === 0 ? (
+      <p class="font-mono text-sm text-[#4a607f]">nenhum til ainda.</p>
+    ) : (
+      <div>
+        {tils.map((til) => (
+          <TilCard
+            title={til.data.title}
+            pubDate={til.data.pubDate}
+            slug={til.id}
+            tags={til.data.tags}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>

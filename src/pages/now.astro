@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+
+const updatedAt = '2025-01';
+---
+
+<BaseLayout
+  title="now — epoch-chrono"
+  description="O que estou fazendo agora."
+>
+  <article class="space-y-8">
+    <header class="space-y-1">
+      <h1 class="text-2xl font-semibold tracking-tight text-[#e8edf7]">now</h1>
+      <p class="font-mono text-xs text-[#4a607f]">atualizado em {updatedAt}</p>
+    </header>
+
+    <div class="space-y-6 text-[#8fa3c8] leading-relaxed">
+      <section class="space-y-2">
+        <h2 class="text-sm font-semibold text-[#e8edf7] font-mono">trabalho</h2>
+        <p>Trabalhando com SRE e platform engineering.</p>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-sm font-semibold text-[#e8edf7] font-mono">projetos</h2>
+        <p>Construindo este site.</p>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-sm font-semibold text-[#e8edf7] font-mono">lendo</h2>
+        <p>—</p>
+      </section>
+    </div>
+
+    <p class="font-mono text-xs text-[#4a607f]">
+      inspirado pelo <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer"
+        class="text-[#00c8e0] hover:underline">/now movement</a>.
+    </p>
+  </article>
+</BaseLayout>

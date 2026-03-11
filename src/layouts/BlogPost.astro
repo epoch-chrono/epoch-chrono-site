@@ -1,0 +1,75 @@
+---
+// BlogPost.astro — layout para posts individuais
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import TagList from '../components/blog/TagList.astro';
+import { formatDate, readingTime } from '../utils/date';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  categories?: string[];
+  lang?: string;
+  canonical?: string;
+  rawContent?: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags = [],
+  categories = [],
+  lang = 'pt-BR',
+  canonical,
+  rawContent = '',
+} = Astro.props;
+
+const mins = readingTime(rawContent);
+---
+
+<BaseLayout {title} {description} {lang} {canonical}>
+  <article>
+    <header class="mb-10 space-y-4">
+      {categories.length > 0 && (
+        <div class="flex gap-2">
+          {categories.map((cat) => (
+            <span class="font-mono text-xs text-[#6b4fc8]">{cat}</span>
+          ))}
+        </div>
+      )}
+
+      <h1 class="text-3xl font-semibold tracking-tight text-[#e8edf7] leading-tight">
+        {title}
+      </h1>
+
+      <p class="text-base text-[#8fa3c8] leading-relaxed">{description}</p>
+
+      <div class="flex items-center gap-3 font-mono text-xs text-[#4a607f]">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate, lang)}</time>
+        <span>·</span>
+        <span>{mins} min leitura</span>
+        {updatedDate && (
+          <>
+            <span>·</span>
+            <span>atualizado em {formatDate(updatedDate, lang)}</span>
+          </>
+        )}
+      </div>
+
+      {tags.length > 0 && <TagList {tags} />}
+    </header>
+
+    <div class="prose prose-invert max-w-none
+                prose-headings:font-semibold prose-headings:tracking-tight
+                prose-a:text-[#00c8e0] prose-a:no-underline hover:prose-a:underline
+                prose-code:text-[#00c8e0] prose-code:bg-[#0f1629] prose-code:px-1 prose-code:rounded
+                prose-pre:bg-[#0f1629] prose-pre:border prose-pre:border-[#1e2d4a]
+                prose-blockquote:border-l-[#00c8e0] prose-blockquote:text-[#8fa3c8]">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

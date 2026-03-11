@@ -1,0 +1,64 @@
+---
+// SEO.astro — head tags, OG, canonical, CF Analytics beacon
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+}
+
+const SITE_URL = 'https://epoch-chrono.com';
+const SITE_AUTHOR = 'Vitor Jr';
+const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
+
+const {
+  title,
+  description = 'SRE & platform engineer. Blog técnico, TIL e projetos open source.',
+  ogImage = '/og/default.png',
+  canonical,
+} = Astro.props;
+
+const canonicalURL = canonical
+  ? new URL(canonical, SITE_URL)
+  : new URL(Astro.url.pathname, SITE_URL);
+
+const fullTitle = title.includes('epoch-chrono') ? title : `${title} — epoch-chrono`;
+const ogImageURL = new URL(ogImage, SITE_URL);
+---
+
+<!-- Primary -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE_AUTHOR} />
+<link rel="canonical" href={canonicalURL} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/favicon-512.png" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:site_name" content="epoch-chrono" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- RSS -->
+<link rel="alternate" type="application/rss+xml" title="epoch-chrono" href="/rss.xml" />
+<link rel="alternate" type="application/rss+xml" title="epoch-chrono · TIL" href="/til/rss.xml" />
+
+<!-- Cloudflare Web Analytics -->
+{CF_ANALYTICS_TOKEN && (
+  <script
+    defer
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon={`{"token": "${CF_ANALYTICS_TOKEN}"}`}
+  />
+)}

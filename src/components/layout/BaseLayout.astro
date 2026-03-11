@@ -1,0 +1,44 @@
+---
+// BaseLayout.astro — layout raiz, todas as páginas passam por aqui
+import '../../styles/global.css';
+import SEO from '../common/SEO.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  lang?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage,
+  canonical,
+  lang = 'pt-BR',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      canonical={canonical}
+    />
+  </head>
+  <body class="bg-[#0a0e1a] text-[#e8edf7] font-sans antialiased min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 py-12 sm:px-6">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

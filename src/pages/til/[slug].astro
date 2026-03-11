@@ -1,0 +1,23 @@
+---
+import TilPost from '../../layouts/TilPost.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const tils = await getCollection('til', ({ data }) => !data.draft);
+  return tils.map((til) => ({
+    params: { slug: til.id },
+    props: { til },
+  }));
+}
+
+const { til } = Astro.props;
+const { Content } = await til.render();
+---
+
+<TilPost
+  title={til.data.title}
+  pubDate={til.data.pubDate}
+  tags={til.data.tags}
+>
+  <Content />
+</TilPost>

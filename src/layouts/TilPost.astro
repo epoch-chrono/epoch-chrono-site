@@ -1,0 +1,50 @@
+---
+// TilPost.astro — layout para TIL individuais
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import { formatDate } from '../utils/date';
+
+interface Props {
+  title: string;
+  pubDate: Date;
+  tags?: string[];
+}
+
+const { title, pubDate, tags = [] } = Astro.props;
+---
+
+<BaseLayout {title} description={`TIL: ${title}`}>
+  <article>
+    <header class="mb-8 space-y-3">
+      <div class="font-mono text-xs text-[#00c8e0]">TIL</div>
+
+      <h1 class="text-2xl font-semibold tracking-tight text-[#e8edf7]">
+        {title}
+      </h1>
+
+      <div class="flex items-center gap-3 font-mono text-xs text-[#4a607f]">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        {tags.length > 0 && (
+          <>
+            <span>·</span>
+            {tags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </>
+        )}
+      </div>
+    </header>
+
+    <div class="prose prose-invert max-w-none
+                prose-a:text-[#00c8e0] prose-a:no-underline hover:prose-a:underline
+                prose-code:text-[#00c8e0] prose-code:bg-[#0f1629] prose-code:px-1 prose-code:rounded
+                prose-pre:bg-[#0f1629] prose-pre:border prose-pre:border-[#1e2d4a]">
+      <slot />
+    </div>
+
+    <footer class="mt-10 pt-6 border-t border-[#1e2d4a]">
+      <a href="/til" class="font-mono text-sm text-[#8fa3c8] hover:text-[#00c8e0] transition-colors">
+        ← todos os TILs
+      </a>
+    </footer>
+  </article>
+</BaseLayout>

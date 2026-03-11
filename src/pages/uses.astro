@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+
+const stack = [
+  { category: 'infra & cloud', items: ['AWS', 'Cloudflare', 'Vercel', 'Kubernetes'] },
+  { category: 'observabilidade', items: ['Prometheus', 'Grafana', 'OpenTelemetry'] },
+  { category: 'linguagens', items: ['Go', 'Python', 'TypeScript', 'Bash/Fish'] },
+  { category: 'iac', items: ['OpenTofu', 'Ansible'] },
+  { category: 'editor & terminal', items: ['Helix', 'Fish shell', 'Ghostty', 'tmux'] },
+  { category: 'hardware', items: ['MacBook Pro M2 Pro'] },
+];
+---
+
+<BaseLayout
+  title="uses — epoch-chrono"
+  description="Ferramentas, setup e stack que uso no dia a dia."
+>
+  <article class="space-y-10">
+    <header class="space-y-1">
+      <h1 class="text-2xl font-semibold tracking-tight text-[#e8edf7]">uses</h1>
+      <p class="font-mono text-sm text-[#4a607f]">ferramentas e setup</p>
+    </header>
+
+    <div class="space-y-8">
+      {stack.map(({ category, items }) => (
+        <section class="space-y-3">
+          <h2 class="font-mono text-xs text-[#00c8e0] uppercase tracking-widest">
+            {category}
+          </h2>
+          <ul class="space-y-1">
+            {items.map((item) => (
+              <li class="text-sm text-[#8fa3c8] flex items-center gap-2">
+                <span class="text-[#1e2d4a]">—</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </article>
+</BaseLayout>

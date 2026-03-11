@@ -1,0 +1,26 @@
+---
+// TagList.astro
+interface Props {
+  tags: string[];
+  activeTag?: string;
+  baseHref?: string;
+}
+
+const { tags, activeTag, baseHref = '/blog/tag' } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-2">
+  {tags.map((tag) => (
+    <a
+      href={`${baseHref}/${tag}`}
+      class:list={[
+        'font-mono text-xs border rounded px-2 py-0.5 transition-colors',
+        tag === activeTag
+          ? 'text-[#00c8e0] border-[#00c8e0] bg-[#162040]'
+          : 'text-[#8fa3c8] border-[#1e2d4a] bg-[#0f1629] hover:text-[#00c8e0] hover:border-[#00c8e0]',
+      ]}
+    >
+      {tag}
+    </a>
+  ))}
+</div>

@@ -1,17 +1,53 @@
 ---
+import BaseLayout from '../components/layout/BaseLayout.astro';
 
+const recentLinks = [
+  { href: '/blog', label: 'blog' },
+  { href: '/til', label: 'til' },
+  { href: '/projects', label: 'projects' },
+  { href: '/uses', label: 'uses' },
+  { href: '/now', label: 'now' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="epoch-chrono — Vitor Jr"
+  description="SRE & platform engineer. Blog técnico, TIL e projetos open source."
+>
+  <section class="space-y-8">
+    <div class="space-y-3">
+      <h1 class="text-2xl font-semibold tracking-tight text-[#e8edf7]">
+        Vitor Jr
+      </h1>
+      <p class="text-sm font-mono text-[#00c8e0]">
+        SRE · platform engineer
+      </p>
+    </div>
+
+    <div class="space-y-3 text-[#8fa3c8] leading-relaxed">
+      <p>
+        Trabalho com confiabilidade, plataformas internas e automação de
+        infraestrutura. Interessado em observabilidade, developer experience
+        e sistemas distribuídos.
+      </p>
+      <p>
+        Aqui: notas técnicas, postmortems, TILs e projetos open source.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        {recentLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class="font-mono text-sm text-[#8fa3c8] hover:text-[#00c8e0] transition-colors"
+            >
+              /{label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </section>
+</BaseLayout>
