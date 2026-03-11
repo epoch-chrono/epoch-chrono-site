@@ -102,37 +102,39 @@ tags: ["linux", "git"]
 
 ### /now page
 
-Edit `src/pages/now.astro` directly — it's a static page, no content collection.
+Edit `src/content/now/index.md` — plain Markdown, no Astro/JSX.
 
-Update the `updatedAt` const at the top and the content inside the `<section>` blocks:
+Update `updatedAt` in the frontmatter and edit the sections using standard headings:
 
-```astro
-const updatedAt = '2026-03';  // ← atualizar aqui
-```
+```markdown
+---
+updatedAt: '2026-03'
+---
 
-Add or edit sections in the format:
+## trabalho
 
-```astro
-<section class="space-y-2">
-  <h2 ...>trabalho</h2>
-  <p>Descrição do que está acontecendo agora.</p>
-</section>
+Descrição do que está rolando no trabalho agora.
+
+## lendo
+
+Título do livro.
 ```
 
 ---
 
 ### /uses page
 
-Edit `src/pages/uses.astro` directly — também é página estática.
+Edit `src/content/uses/index.md` — plain Markdown, no Astro/JSX.
 
-Update the `stack` array at the top of the file:
+Add, remove or rename categories using headings and lists:
 
-```astro
-const stack = [
-  { category: 'infra & cloud', items: ['AWS', 'Cloudflare', 'Vercel'] },
-  { category: 'editor & terminal', items: ['Helix', 'Fish shell', 'Ghostty'] },
-  // adicionar ou remover categorias aqui
-];
+```markdown
+## editor & terminal
+
+- Helix
+- Fish shell
+- Ghostty
+- tmux
 ```
 
 ---
