@@ -131,5 +131,5 @@ mise use pnpm@latest
 - TODA alteração (change, delete, update) em qualquer recurso: 1. Backup prévio, 2. Plano de rollback
 - Timestamps em BRT (UTC-3)
 - Títulos de conversa: `{YYYYMMDD-HHmm}-{ProjetoSlug}-{DescricaoCurta}` onde slug = `epoch-chrono`
-- Tracking: GitHub Issues no repo [epoch-chrono/epoch-chrono](https://github.com/epoch-chrono/epoch-chrono)
+- Tracking: GitHub Issues no repo [epoch-chrono/epoch-chrono-site](https://github.com/epoch-chrono/epoch-chrono-site)
 - Posts rascunho: nunca commitar com `draft: false` sem revisão
