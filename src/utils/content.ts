@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 /** Retorna posts de blog publicados, ordenados do mais recente. */
 export async function getPublishedPosts() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection('blog', ({ data }) => !data.draft).catch(() => []);
   return posts.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );
@@ -19,7 +19,7 @@ export async function getPublishedTils() {
 
 /** Retorna projects, ordenados por featured e depois por data. */
 export async function getProjects() {
-  const projects = await getCollection('projects');
+  const projects = await getCollection('projects').catch(() => []);
   return projects.sort((a, b) => {
     if (a.data.featured && !b.data.featured) return -1;
     if (!a.data.featured && b.data.featured) return 1;
