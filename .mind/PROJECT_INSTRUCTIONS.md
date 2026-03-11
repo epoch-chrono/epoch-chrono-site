@@ -102,11 +102,17 @@ Newsletter:  Buttondown
 
 ```bash
 # Remote origin: org epoch-chrono no GitHub
-# Repo: https://github.com/epoch-chrono/epoch-chrono
-# Branch principal: main
+# Repo: https://github.com/epoch-chrono/epoch-chrono-site
+# Branch principal: main — PROTEGIDA pelo pre-commit hook no-commit-to-branch
+# NUNCA commitar direto em main. SEMPRE criar branch antes.
 
-git branch --show-current
-```
+# Fluxo obrigatório:
+git checkout -b <type>/<descricao>
+git add .
+git cz
+git push origin <branch>
+gh pr create --title "..." --body "" --base main --head <branch> \
+  && gh pr merge (gh pr list --repo epoch-chrono/epoch-chrono-site --state open --json number -q '.[].number') --merge --delete-branch
 
 ### Mise (gerenciamento de versões)
 

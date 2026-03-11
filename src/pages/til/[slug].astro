@@ -1,6 +1,6 @@
 ---
 import TilPost from '../../layouts/TilPost.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const tils = await getCollection('til', ({ data }) => !data.draft);
@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { til } = Astro.props;
-const { Content } = await til.render();
+const { Content } = await render(til);
 ---
 
 <TilPost
