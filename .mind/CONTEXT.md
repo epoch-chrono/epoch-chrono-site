@@ -30,18 +30,19 @@ Os arquivos estão no repo público — nenhuma autenticação necessária.
 
 ## Sync com claude.ai
 
-Apenas estes arquivos precisam ser upados manualmente no projeto claude.ai:
+O projeto usa o **conector GitHub** do claude.ai — todos os arquivos do repo são sincronizados automaticamente a cada push.
+
+Apenas um arquivo requer upload manual (contém credenciais, está no `.gitignore`):
 
 | Arquivo | Alvo | Quando re-upar |
 | :------ | :--- | :------------- |
 | `.mind/PROJECT_INSTRUCTIONS.claude.md` | Project Instructions | Após rodar `gen-claude-instructions` |
-| `.mind/CONTEXT.md` (este arquivo) | Project Knowledge | Quando um novo arquivo `.mind/` for criado |
 
-Todo o resto é lido sob demanda via URL acima — nunca precisa ser upado.
+Todo o resto (incluindo este `CONTEXT.md` e todos os artefatos `.mind/`) é sincronizado automaticamente via conector GitHub.
 
 ## Adicionando novos artefatos
 
 Quando um novo arquivo for criado em `.mind/`:
 
 1. Adicionar linha na tabela "Artefatos — leitura sob demanda" acima
-2. Re-upar este `CONTEXT.md` no claude.ai
+2. Commitar e fazer push — o conector GitHub sincroniza automaticamente
