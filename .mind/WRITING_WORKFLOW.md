@@ -170,42 +170,44 @@ hx $file
 
 ---
 
-## Tom e voz — referência canônica
+## Tom e voz — IMPORTANTE
 
-O post ["Troquei bash/zsh por fish"](../src/content/blog/2026-03-12-troquei-bash-zsh-por-fish.md) é a referência de como escrever aqui.
+O tom do site é **zoeiro, escrachado e honesto**. Não é blog corporativo. Não é documentação técnica. É uma pessoa real falando de um assunto técnico como falaria para um colega de trabalho que também já perdeu sono por causa de YAML.
 
-### Princípios
+**O que isso significa na prática:**
 
-**Começa com situação reconhecível.**
-O leitor precisa se ver na cena antes do primeiro parágrafo acabar.
-Não "neste post vou falar sobre fish". Sim: "você estava feliz com seu `.bashrc` de 400 linhas que nem você entende mais."
+- Começa com uma situação que o leitor reconhece — a dor, o contexto, o momento antes da decisão
+- Usa ironia e auto-depreciação sem medo — o autor sabe do que está falando, mas não precisa soar importante
+- Spoilers deliberados: anuncia o que vai doer antes de explicar por quê
+- Analogias absurdas são bem-vindas quando iluminam o conceito
+- Humor não é enfeite — é o mecanismo que mantém o leitor acordado no meio de um bloco de código
+- Profissionalismo não exclui personalidade. A área já é doída o suficiente.
 
-**Ironia e auto-depreciação são ferramentas, não enfeite.**
-O humor surge do reconhecimento, não de piadas. "Quanto pode custar?" funciona porque todo mundo já pensou isso antes de uma migração.
+**Exemplo de abertura canônica** (post do fish):
 
-**Spoilers deliberados.**
-Entregar o punchline cedo ("Spoiler: custa sua sanidade por uns três dias") não estraga o post — cria contrato com o leitor. Ele sabe o que vem e continua porque quer os detalhes.
+> Você estava feliz com seu `.bashrc` de 400 linhas que nem você entende mais.
+> Aí alguém falou "cara, usa fish". E você pensou: *quanto pode custar?*
+> Spoiler: custa sua sanidade por uns três dias e todos os seus scripts legados.
 
-**Tom direto, sem reverência ao assunto.**
-Bash tem `;;` e `esac`? "Parece que alguém estava bêbado quando inventou." Arrays em bash? "Uma piada de mau gosto." Sem neutralidade forçada.
+**O que evitar:**
 
-**Conclusão honesta, não motivacional.**
-"Vale a pena." — duas palavras. Sem "espero que este post tenha sido útil", sem "deixe nos comentários", sem resumo do que acabou de ser dito.
-
-### O que evitar
-
-- "Neste artigo vamos explorar..."
-- "É importante ressaltar que..."
-- "Como vimos anteriormente..."
-- Tom neutro de documentação quando o assunto permite opinião
-- Conclusões genéricas que poderiam terminar qualquer post
-- Bullet points onde parágrafos funcionam melhor
+- "Neste artigo, vamos explorar..." — não é TCC
+- "É importante ressaltar que..." — você não é o seu gerente
+- Conclusões genéricas do tipo "espero que tenha sido útil"
+- Tom neutro demais — se deu sono em você escrever, vai dar no leitor
 
 ### Aplicação por tipo de conteúdo
 
 | Tipo | Tom |
-|---|---|
+| :--- | :--- |
 | TIL | Ultra direto. O que era, o que aprendi, o comando/conceito. Sem intro. |
 | Blog técnico | Situação reconhecível → problema → solução → opinião honesta |
 | Postmortem | Factual no que aconteceu, honesto no que falhou, sem culpa performática |
 | Opinião | Tese clara logo no início, argumentos, sem "depende" genérico no final |
+
+### Posts de referência
+
+| Post | O que exemplifica |
+| :--- | :--- |
+| `2026-03-12-troquei-bash-zsh-por-fish.md` | Tom zoeiro, abertura com dor reconhecível, ironia como ferramenta |
+| `2026-03-12-postgres-mvcc-vacuum-para-quem-vem-do-oracle.md` | Técnico denso sem virar documentação, narrativa comparativa, conclusão honesta sem motivacional |
