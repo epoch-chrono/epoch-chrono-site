@@ -52,15 +52,15 @@ const {
         // --- desktop: digitar "lavos" ---
         const secret = 'lavos';
         let buffer = '';
-        let timer: ReturnType<typeof setTimeout>;
+        let keyTimer: ReturnType<typeof setTimeout>;
 
         document.addEventListener('keydown', (e) => {
           const tag = (e.target as HTMLElement).tagName;
           if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 
           buffer += e.key.toLowerCase();
-          clearTimeout(timer);
-          timer = setTimeout(() => { buffer = ''; }, 1500);
+          clearTimeout(keyTimer);
+          keyTimer = setTimeout(() => { buffer = ''; }, 1500);
 
           if (buffer.length > secret.length) {
             buffer = buffer.slice(-secret.length);
@@ -72,22 +72,23 @@ const {
           }
         });
 
-        // --- mobile: long press (1.5s) no logo ---
-        const logo = document.getElementById('site-logo');
-        if (logo) {
-          let pressTimer: ReturnType<typeof setTimeout>;
+        // --- mobile: 3 taps rápidos no corpo da página (não em links/botões) ---
+        let tapCount = 0;
+        let tapTimer: ReturnType<typeof setTimeout>;
 
-          logo.addEventListener('touchstart', (e) => {
-            pressTimer = setTimeout(() => {
-              e.preventDefault();
-              window.location.href = BATTLE_URL;
-            }, 1500);
-          }, { passive: false });
+        document.addEventListener('touchend', (e) => {
+          const tag = (e.target as HTMLElement).tagName;
+          if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 
-          logo.addEventListener('touchend', () => clearTimeout(pressTimer));
-          logo.addEventListener('touchcancel', () => clearTimeout(pressTimer));
-          logo.addEventListener('touchmove', () => clearTimeout(pressTimer));
-        }
+          tapCount++;
+          clearTimeout(tapTimer);
+          tapTimer = setTimeout(() => { tapCount = 0; }, 600);
+
+          if (tapCount >= 3) {
+            tapCount = 0;
+            window.location.href = BATTLE_URL;
+          }
+        });
       })();
     </script>
   </body>
