@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # bin/gen-claude-instructions
-# v1.0.0
+# v1.1.0
 #
 # Gera .mind/PROJECT_INSTRUCTIONS.claude.md a partir de:
 #   - .mind/PROJECT_INSTRUCTIONS.md  (template com placeholders)
@@ -26,16 +26,22 @@ OUTPUT      = REPO_ROOT / ".mind" / "PROJECT_INSTRUCTIONS.claude.md"
 
 DRY_RUN     = "--dry-run" in sys.argv
 
+# Vars que não são secrets — valores hardcoded no template são intencionais
+NON_SECRET_VARS = {
+    "SITE_DOMAIN", "SITE_AUTHOR", "EMAIL_AUTHOR", "GITHUB_ORG",
+    "GITHUB_USER", "GITHUB_REPO", "VERCEL_PROJECT", "BUTTONDOWN_API",
+    "NOTION_BASE_PAGE", "MISE_NODE_DEFAULT_PACKAGES_FILE",
+    "MISE_PYTHON_DEFAULT_PACKAGES_FILE", "SSH_AUTH_SOCK", "PATH",
+}
+
 # ── Parse .envrc ──────────────────────────────────────────────────────────────
 
 def parse_envrc(path: Path) -> dict[str, str]:
     """Extrai export VARNAME='VALUE' do .envrc — ignora linhas sem valor."""
     env = {}
-    pattern = re.compile(r"""^export\s+(\w+)=['"]?([^'"#\n]*)['"]?""")
-    # Mais preciso: captura valor entre aspas simples ou duplas
-    pattern_quoted = re.compile(r"""^export\s+(\w+)='([^']*)'""")
+    pattern_quoted  = re.compile(r"""^export\s+(\w+)='([^']*)'""")
     pattern_dquoted = re.compile(r'^export\s+(\w+)="([^"]*)"')
-    pattern_bare = re.compile(r"""^export\s+(\w+)=([^'"\s#][^\s#]*)""")
+    pattern_bare    = re.compile(r"""^export\s+(\w+)=([^'"\s#][^\s#]*)""")
 
     for line in path.read_text().splitlines():
         line = line.strip()
@@ -43,18 +49,21 @@ def parse_envrc(path: Path) -> dict[str, str]:
             m = pat.match(line)
             if m:
                 key, val = m.group(1), m.group(2)
-                if val:  # ignora vazios
+                if val:
                     env[key] = val
                 break
     return env
 
 # ── Process template ──────────────────────────────────────────────────────────
 
-def process_template(template: Path, env: dict[str, str]) -> str:
+def process_template(template: Path, env: dict[str, str]) -> tuple[str, list[str]]:
+    """
+    Retorna (conteúdo processado, lista de warnings).
+    Warnings: vars do .envrc sem placeholder no template.
+    """
     lines = template.read_text().splitlines()
     out = []
-
-    # Substitui header público pelo header com aviso de credenciais
+    substituted = set()
     header_replaced = False
 
     for line in lines:
@@ -64,13 +73,13 @@ def process_template(template: Path, env: dict[str, str]) -> str:
             header_replaced = True
             continue
 
-        # Remove nota de versão pública (próximas 2 linhas após o título)
+        # Remove/troca nota de versão pública
         if "> Versão completa com credenciais" in line:
             out.append("> **Este arquivo contém credenciais reais. Nunca commitar. Está no `.gitignore`.**")
             out.append("> Versão pública (sem segredos): `.mind/PROJECT_INSTRUCTIONS.md` no repo.")
             continue
         if "> Ver `.envrc.example`" in line:
-            continue  # remove linha de exemplo
+            continue
 
         # Substitui linhas do tipo: VARNAME=        # ver .envrc
         m = re.match(r'^(\s*)(\w+)=\s*#\s*ver \.envrc\s*$', line)
@@ -78,13 +87,23 @@ def process_template(template: Path, env: dict[str, str]) -> str:
             indent, varname = m.group(1), m.group(2)
             if varname in env:
                 out.append(f"{indent}{varname}='{env[varname]}'")
+                substituted.add(varname)
             else:
                 out.append(line)  # mantém placeholder se var não encontrada
+                print(f"⚠️  Placeholder '{varname}' encontrado no template mas não no .envrc", file=sys.stderr)
             continue
 
         out.append(line)
 
-    return "\n".join(out) + "\n"
+    # Detecta vars secretas no .envrc sem placeholder no template
+    warnings = []
+    for varname in env:
+        if varname in NON_SECRET_VARS:
+            continue
+        if varname not in substituted:
+            warnings.append(varname)
+
+    return "\n".join(out) + "\n", warnings
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -97,16 +116,26 @@ def main():
         sys.exit(1)
 
     env = parse_envrc(ENVRC)
-    result = process_template(TEMPLATE, env)
+    result, warnings = process_template(TEMPLATE, env)
 
     if DRY_RUN:
         print(result)
+        if warnings:
+            print("\n⚠️  Vars no .envrc SEM placeholder no template (não serão injetadas):", file=sys.stderr)
+            for w in warnings:
+                print(f"   - {w}=        # ver .envrc", file=sys.stderr)
         return
 
     OUTPUT.write_text(result)
     print(f"✅ Gerado: {OUTPUT.relative_to(REPO_ROOT)}")
-    print(f"   Variáveis injetadas: {len(env)}")
-    print(f"   Agora upe o arquivo nas instruções do projeto no claude.ai")
+    print(f"   Variáveis injetadas: {len(env) - len(warnings)}")
+
+    if warnings:
+        print(f"\n⚠️  {len(warnings)} var(s) no .envrc SEM placeholder no template — adicione ao PROJECT_INSTRUCTIONS.md:")
+        for w in warnings:
+            print(f"   {w}=        # ver .envrc")
+
+    print(f"\n   Agora upe o arquivo nas instruções do projeto no claude.ai")
 
 if __name__ == "__main__":
     main()
