@@ -1,12 +1,14 @@
 ---
 // Footer.astro
+import { version } from '../../../package.json';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-[#1e2d4a] mt-16">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
     <span class="font-mono text-xs text-[#4a607f]">
-      &copy; {year} Vitor Jr
+      &copy; {year} Vitor Jr &nbsp;·&nbsp; v{version}
     </span>
     <div class="flex items-center gap-4">
       <a
