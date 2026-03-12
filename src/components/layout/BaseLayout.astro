@@ -5,6 +5,7 @@ import SEO from '../common/SEO.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { SpeedInsights } from '@vercel/speed-insights/astro';
+import { Analytics } from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -42,5 +43,6 @@ const {
     </main>
     <Footer />
     <SpeedInsights />
+    <Analytics />
   </body>
 </html>
