@@ -3,7 +3,11 @@ import BlogPost from '../../layouts/BlogPost.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft).catch(() => []);
+  const now = new Date();
+  const posts = await getCollection(
+    'blog',
+    ({ data }) => !data.draft && data.pubDate <= now,
+  ).catch(() => []);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -11,7 +15,8 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, remarkPluginFrontmatter } = await render(post);
+const rawContent = post.body ?? '';
 ---
 
 <BlogPost
@@ -23,6 +28,8 @@ const { Content } = await render(post);
   categories={post.data.categories}
   lang={post.data.lang}
   canonical={post.data.canonical}
+  postVersion={post.data.postVersion}
+  rawContent={rawContent}
 >
   <Content />
 </BlogPost>

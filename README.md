@@ -170,6 +170,54 @@ tags: ["go", "cli"]
 
 See [`.mind/CONTENT_CONVENTIONS.md`](.mind/CONTENT_CONVENTIONS.md) for frontmatter schema and writing conventions.
 
+## Versioning
+
+This project uses two independent versioning concepts.
+
+### epochVersion — site version
+
+Tracks the overall site as a software artifact. Lives in `package.json` and git tags.
+
+```json
+{ "version": "0.1.0" }
+```
+
+Displayed automatically in the footer of every page (`© 2026 Vitor Jr · v0.1.0`).
+
+To bump and release:
+
+```sh
+./bin/tag-release.fish [major|minor|patch]
+# default: patch
+# bumps package.json, commits, creates annotated git tag, pushes both
+```
+
+Semver intent:
+- `patch` — bug fixes, small UI tweaks, dependency updates
+- `minor` — new features, new sections, significant content additions
+- `major` — full redesigns, breaking changes to structure
+
+### postVersion — content version
+
+Tracks the version of an individual post or project page. Optional field in frontmatter.
+
+```yaml
+---
+postVersion: "1.0.0"
+---
+```
+
+Displayed in the footer of the post/project page when present (`post v1.0.0`).
+
+Semver intent:
+- `1.0.0` — first published version
+- `1.1.0` — minor corrections, added sections, updated examples
+- `2.0.0` — significant rewrite or restructure
+
+Posts without `postVersion` show no version in the footer — omit for drafts or when not relevant.
+
+---
+
 ## Git flow
 
 `main` is protected — never commit directly.
