@@ -1,0 +1,86 @@
+/*
+ * giscus-theme.css — epoch-chrono custom theme
+ * Paleta: DESIGN_SYSTEM.md (dark mode, ciano Epoch)
+ * Referência: https://github.com/giscus/giscus/blob/main/styles/themes/custom_example.css
+ */
+
+:root {
+  /* Canvas / backgrounds */
+  --color-canvas-default:         #0f1629;
+  --color-canvas-overlay:         #162040;
+  --color-canvas-inset:           #0a0e1a;
+  --color-canvas-subtle:          #0a0e1a;
+
+  /* Foreground / text */
+  --color-fg-default:             #e8edf7;
+  --color-fg-muted:               #8fa3c8;
+  --color-fg-subtle:              #4a607f;
+
+  /* Borders */
+  --color-border-default:         #1e2d4a;
+  --color-border-muted:           #1e2d4a;
+  --color-border-subtle:          #162040;
+
+  /* Neutral */
+  --color-neutral-muted:          rgba(30, 45, 74, 0.5);
+  --color-neutral-subtle:         rgba(22, 32, 64, 0.4);
+
+  /* Accent — ciano Epoch */
+  --color-accent-fg:              #00c8e0;
+  --color-accent-emphasis:        #00c8e0;
+  --color-accent-muted:           rgba(0, 200, 224, 0.15);
+  --color-accent-subtle:          rgba(0, 200, 224, 0.10);
+
+  /* Reactions / success */
+  --color-success-fg:             #00e896;
+  --color-success-emphasis:       #00e896;
+  --color-success-muted:          rgba(0, 232, 150, 0.15);
+  --color-success-subtle:         rgba(0, 232, 150, 0.10);
+
+  /* Danger / error */
+  --color-danger-fg:              #e84060;
+  --color-danger-emphasis:        #e84060;
+  --color-danger-muted:           rgba(232, 64, 96, 0.15);
+  --color-danger-subtle:          rgba(232, 64, 96, 0.10);
+
+  /* Prettier */
+  --color-prettylights-syntax-comment:         #4a607f;
+  --color-prettylights-syntax-constant:        #00c8e0;
+  --color-prettylights-syntax-entity:          #6b4fc8;
+  --color-prettylights-syntax-storage-modifier-import: #e8edf7;
+  --color-prettylights-syntax-entity-tag:     #00e896;
+  --color-prettylights-syntax-keyword:        #00c8e0;
+  --color-prettylights-syntax-string:         #f0a830;
+  --color-prettylights-syntax-variable:       #e8edf7;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #e84060;
+  --color-prettylights-syntax-invalid-illegal-text: #0a0e1a;
+  --color-prettylights-syntax-invalid-illegal-bg:  #e84060;
+  --color-prettylights-syntax-carriage-return-text: #0a0e1a;
+  --color-prettylights-syntax-carriage-return-bg:  #e84060;
+  --color-prettylights-syntax-string-regexp:  #00e896;
+  --color-prettylights-syntax-markup-list:    #f0a830;
+  --color-prettylights-syntax-markup-heading: #00c8e0;
+  --color-prettylights-syntax-markup-italic:  #e8edf7;
+  --color-prettylights-syntax-markup-bold:    #e8edf7;
+  --color-prettylights-syntax-markup-deleted-text: #e84060;
+  --color-prettylights-syntax-markup-deleted-bg:   rgba(232,64,96,0.15);
+  --color-prettylights-syntax-markup-inserted-text: #00e896;
+  --color-prettylights-syntax-markup-inserted-bg:  rgba(0,232,150,0.15);
+  --color-prettylights-syntax-markup-changed-text: #f0a830;
+  --color-prettylights-syntax-markup-changed-bg:   rgba(240,168,48,0.15);
+  --color-prettylights-syntax-markup-ignored-text: #4a607f;
+  --color-prettylights-syntax-markup-ignored-bg:   #0f1629;
+  --color-prettylights-syntax-meta-diff-range: #6b4fc8;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #4a607f;
+
+  /* Social reaction buttons */
+  --color-social-reaction-bg-hover:    rgba(0, 200, 224, 0.10);
+  --color-social-reaction-bg-reacted-hover: rgba(0, 200, 224, 0.20);
+
+  /* Scrollbar */
+  --color-scrollbar-thumb:        #1e2d4a;
+
+  /* Font */
+  --font-body:  'Inter', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}
