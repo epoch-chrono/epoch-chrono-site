@@ -44,5 +44,36 @@ const {
     <Footer />
     <SpeedInsights />
     <Analytics />
+
+    <script>
+      // easter egg: digitar "lavos" em qualquer página redireciona para /battle
+      (() => {
+        const secret = 'lavos';
+        let buffer = '';
+        let timer: ReturnType<typeof setTimeout>;
+
+        document.addEventListener('keydown', (e) => {
+          // ignora se foco está em input/textarea
+          const tag = (e.target as HTMLElement).tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+          buffer += e.key.toLowerCase();
+
+          // janela de 1.5s para completar a sequência
+          clearTimeout(timer);
+          timer = setTimeout(() => { buffer = ''; }, 1500);
+
+          // mantém só o sufixo relevante
+          if (buffer.length > secret.length) {
+            buffer = buffer.slice(-secret.length);
+          }
+
+          if (buffer === secret) {
+            buffer = '';
+            window.location.href = '/battle';
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
