@@ -1,0 +1,147 @@
+name: Notify new post via Buttondown
+
+on:
+  workflow_run:
+    workflows: ["Scheduled deploy"]
+    types: [completed]
+  workflow_dispatch:  # trigger manual para testes
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    # Só executa se o deploy foi bem-sucedido (ou se for trigger manual)
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Wait for Vercel build to finish
+        run: sleep 180  # 3 min — Vercel SSG ~30s, margem pra propagação de CDN
+
+      - name: Check RSS and notify Buttondown if new post today
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: |
+          # shellcheck disable=SC1009,SC1044,SC1072,SC1073
+          python3 << 'PYEOF'
+          import os, sys, json, urllib.request, urllib.error
+          import xml.etree.ElementTree as ET
+          from datetime import datetime, timezone, timedelta
+          from email.utils import parsedate_to_datetime
+
+          HR        = "---"  # separador
+          BRT       = timezone(timedelta(hours=-3))
+          TODAY_BRT = datetime.now(BRT).date()
+          BD_API    = "https://api.buttondown.email/v1"
+          BD_KEY    = os.environ.get("BUTTONDOWN_API_KEY", "")
+          RSS_URL   = "https://epoch-chrono.com/rss.xml"
+
+          if not BD_KEY:
+              print("BUTTONDOWN_API_KEY não definida — abortando.")
+              sys.exit(1)
+
+          # ── 1. Fetch RSS ────────────────────────────────────────────────────
+          print(f"Buscando RSS: {RSS_URL}")
+          req = urllib.request.Request(RSS_URL, headers={"User-Agent": "epoch-chrono/notify-bot"})
+          try:
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  rss_content = r.read()
+          except Exception as e:
+              print(f"Erro ao buscar RSS: {e}")
+              sys.exit(1)
+
+          # ── 2. Parse — item mais recente ────────────────────────────────────
+          root    = ET.fromstring(rss_content)
+          channel = root.find("channel")
+          items   = channel.findall("item") if channel is not None else []
+
+          if not items:
+              print("Feed vazio — nada a enviar.")
+              sys.exit(0)
+
+          item         = items[0]
+          title        = (item.findtext("title")       or "").strip()
+          link         = (item.findtext("link")        or "").strip()
+          description  = (item.findtext("description") or "").strip()
+          pub_date_str = (item.findtext("pubDate")     or "").strip()
+          tags         = [c.text.strip() for c in item.findall("category") if c.text]
+
+          print(f"Post mais recente: {title!r} ({pub_date_str})")
+
+          # ── 3. Verificar se publicado hoje (BRT) ────────────────────────────
+          try:
+              pub_dt = parsedate_to_datetime(pub_date_str).astimezone(BRT)
+          except Exception as e:
+              print(f"Não foi possível parsear pubDate '{pub_date_str}': {e} — abortando.")
+              sys.exit(0)
+
+          if pub_dt.date() != TODAY_BRT:
+              print(f"Post de {pub_dt.date()}, hoje é {TODAY_BRT} — nada a enviar.")
+              sys.exit(0)
+
+          print(f"✓ Post de hoje: {title!r} — {link}")
+
+          # ── 4. Helpers Buttondown API ───────────────────────────────────────
+          BD_HEADERS = {
+              "Authorization": f"Token {BD_KEY}",
+              "Content-Type": "application/json",
+          }
+
+          def bd_get(path):
+              req = urllib.request.Request(f"{BD_API}{path}", headers=BD_HEADERS)
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  return json.loads(r.read())
+
+          def bd_post(path, data):
+              payload = json.dumps(data).encode()
+              req = urllib.request.Request(
+                  f"{BD_API}{path}", method="POST", data=payload, headers=BD_HEADERS
+              )
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  return json.loads(r.read())
+
+          # ── 5. Deduplificação ───────────────────────────────────────────────
+          slug = link.rstrip("/").split("/")[-1]
+
+          for status in ("sent", "about_to_send", "scheduled", "draft"):
+              try:
+                  emails = bd_get(f"/emails?status={status}&ordering=-creation_date&page_size=10")
+              except Exception as e:
+                  print(f"Aviso: erro checando status={status}: {e}")
+                  continue
+              for email in emails.get("results", []):
+                  haystack = (email.get("subject","") + " " + email.get("body","")).lower()
+                  if slug.lower() in haystack or title.lower() in haystack:
+                      print(f"Email já existe (status={status}, id={email.get('id')}) — skip.")
+                      sys.exit(0)
+
+          # ── 6. Montar body ──────────────────────────────────────────────────
+          tags_line  = "  ".join(f"`{t}`" for t in tags[:5])
+          tags_block = ("\n" + tags_line + "\n") if tags_line else ""
+
+          body = (
+              f"Novo post em [epoch-chrono.com](https://epoch-chrono.com):\n\n"
+              f"{HR}\n\n"
+              f"## [{title}]({link})\n\n"
+              f"{description}\n"
+              f"{tags_block}\n"
+              f"[**Ler o post \u2192**]({link})\n\n"
+              f"{HR}\n\n"
+              f"*Sem frequência forçada — só aparece quando tiver algo que vale o seu tempo.*\n"
+          )
+
+          # ── 7. Criar e enviar ───────────────────────────────────────────────
+          payload = {
+              "subject": title,
+              "body": body,
+              "status": "about_to_send",
+          }
+
+          print(f"Criando email: {title!r}")
+          try:
+              result = bd_post("/emails", payload)
+          except urllib.error.HTTPError as e:
+              err_body = e.read().decode()
+              print(f"Erro HTTP {e.code}: {err_body}")
+              sys.exit(1)
+
+          print(f"✓ Enviado! ID: {result.get('id')} | Subject: {result.get('subject')}")
+          PYEOF
