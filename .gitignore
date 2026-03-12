@@ -42,10 +42,11 @@ Thumbs.db
 npm-debug.log*
 pnpm-debug.log*
 
-# Claude App — contém credenciais
+# Claude App — contém credenciais e artefatos de sessão locais
 .mind/PROJECT_INSTRUCTIONS.claude.md
 .mind/HANDOVER.md
 .mind/tmp/
+.mind/snapshots/
 
 # Mise local overrides
 .mise.local.toml
