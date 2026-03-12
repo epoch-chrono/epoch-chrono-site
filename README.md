@@ -4,6 +4,14 @@ Personal site — [epoch-chrono.com](https://epoch-chrono.com)
 
 Blog, TIL, projects and notes by [Vitor Jr](https://epoch-chrono.com) — SRE & platform engineer.
 
+[![Vercel](https://img.shields.io/github/deployments/epoch-chrono/epoch-chrono-site/Production?label=vercel&logo=vercel&logoColor=white)](https://vercel.com/epoch-chrono/epoch-chrono)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fepoch-chrono.com&label=epoch-chrono.com)](https://epoch-chrono.com)
+[![Scheduled deploy](https://img.shields.io/github/actions/workflow/status/epoch-chrono/epoch-chrono-site/scheduled-deploy.yml?label=scheduled%20deploy)](https://github.com/epoch-chrono/epoch-chrono-site/actions/workflows/scheduled-deploy.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Astro](https://img.shields.io/badge/astro-v6-orange)](https://astro.build)
+[![Node](https://img.shields.io/badge/node-%3E%3D22.12-green)](https://nodejs.org)
+[![epoch version](https://img.shields.io/github/package-json/v/epoch-chrono/epoch-chrono-site?label=epoch&color=00c8e0)](package.json)
+
 ## Stack
 
 - **Framework:** [Astro v6](https://astro.build) (SSG)
@@ -193,6 +201,7 @@ To bump and release:
 ```
 
 Semver intent:
+
 - `patch` — bug fixes, small UI tweaks, dependency updates
 - `minor` — new features, new sections, significant content additions
 - `major` — full redesigns, breaking changes to structure
@@ -210,6 +219,7 @@ postVersion: "1.0.0"
 Displayed in the footer of the post/project page when present (`post v1.0.0`).
 
 Semver intent:
+
 - `1.0.0` — first published version
 - `1.1.0` — minor corrections, added sections, updated examples
 - `2.0.0` — significant rewrite or restructure
