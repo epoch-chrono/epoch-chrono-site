@@ -24,5 +24,8 @@
     "astro": "^6.0.3",
     "stackshare": "^0.0.5",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@commitlint/cz-commitlint": "^20.4.4"
   }
 }
