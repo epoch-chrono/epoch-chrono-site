@@ -18,9 +18,10 @@
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^6.0.3",
-    "tailwindcss": "^4.2.1",
+    "@vercel/analytics": "^1",
     "@vercel/speed-insights": "^1",
-    "@vercel/analytics": "^1"
+    "astro": "^6.0.3",
+    "stackshare": "^0.0.5",
+    "tailwindcss": "^4.2.1"
   }
 }

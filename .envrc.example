@@ -37,6 +37,9 @@ export NOTION_BASE_PAGE='https://www.notion.so/epoch-chrono/epoch-chrono-com-sit
 # === Github === #
 export GITHUB_API_TOKEN='ghp_23...'
 
+# === Stackshare === #
+export STACKSHARE_API_TOKEN='sk_live_dc...'
+
 # === OnePassword === #
 export SSH_AUTH_SOCK=''
 
