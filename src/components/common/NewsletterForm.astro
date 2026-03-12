@@ -7,6 +7,15 @@ const EMBED_URL = `https://buttondown.email/api/emails/embed-subscribe/${BUTTOND
 
 <div class="newsletter-wrap border border-[#1e2d4a] bg-[#0f1629] rounded-sm p-6">
   <p class="font-mono text-xs text-[#4a607f] uppercase tracking-widest mb-1">newsletter</p>
+
+  <!-- Banner pós-confirmação: visível apenas quando ?subscribed=1 -->
+  <p
+    id="subscribed-banner"
+    class="hidden font-mono text-xs text-[#00c8e0] mb-3"
+  >
+    ✓ inscrição confirmada — bem-vindo(a).
+  </p>
+
   <p class="text-sm text-[#8fa3c8] mb-4">
     Posts novos, TILs e notas ocasionais. Sem spam, sem frequência forçada.
   </p>
@@ -45,6 +54,17 @@ const EMBED_URL = `https://buttondown.email/api/emails/embed-subscribe/${BUTTOND
 </div>
 
 <script>
+  // Banner de confirmação pós-redirect do Buttondown
+  const banner = document.getElementById('subscribed-banner');
+  if (banner && new URLSearchParams(window.location.search).get('subscribed') === '1') {
+    banner.classList.remove('hidden');
+    // Limpa o param da URL sem reload
+    const url = new URL(window.location.href);
+    url.searchParams.delete('subscribed');
+    window.history.replaceState({}, '', url);
+  }
+
+  // Submit handler
   const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
   const msg = document.getElementById('newsletter-msg') as HTMLElement | null;
 
