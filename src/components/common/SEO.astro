@@ -1,5 +1,5 @@
 ---
-// SEO.astro — head tags, OG, canonical, CF Analytics beacon
+// SEO.astro — head tags, OG, canonical, CF Analytics beacon, Umami analytics
 interface Props {
   title: string;
   description?: string;
@@ -10,6 +10,7 @@ interface Props {
 const SITE_URL = 'https://epoch-chrono.com';
 const SITE_AUTHOR = 'Vitor Jr';
 const CF_ANALYTICS_TOKEN = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
+const UMAMI_WEBSITE_ID = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
 
 const {
   title,
@@ -60,5 +61,14 @@ const ogImageURL = new URL(ogImage, SITE_URL);
     defer
     src="https://static.cloudflareinsights.com/beacon.min.js"
     data-cf-beacon={`{"token": "${CF_ANALYTICS_TOKEN}"}`}
+  />
+)}
+
+<!-- Umami Analytics -->
+{UMAMI_WEBSITE_ID && (
+  <script
+    defer
+    src="https://cloud.umami.is/script.js"
+    data-website-id={UMAMI_WEBSITE_ID}
   />
 )}

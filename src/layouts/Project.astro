@@ -1,6 +1,7 @@
 ---
 // Project.astro — layout para projetos individuais
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import Giscus from '../components/common/Giscus.astro';
 
 interface Props {
   title: string;
@@ -73,5 +74,7 @@ const st = statusConfig[status];
         <span class="font-mono text-xs text-[#4a607f]">post v{postVersion}</span>
       </footer>
     )}
+
+    <Giscus />
   </article>
 </BaseLayout>

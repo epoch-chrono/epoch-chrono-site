@@ -2,6 +2,7 @@
 // BlogPost.astro — layout para posts individuais
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import TagList from '../components/blog/TagList.astro';
+import Giscus from '../components/common/Giscus.astro';
 import { formatDate, readingTime } from '../utils/date';
 
 interface Props {
@@ -79,5 +80,7 @@ const mins = readingTime(rawContent);
         <span class="font-mono text-xs text-[#4a607f]">post v{postVersion}</span>
       </footer>
     )}
+
+    <Giscus />
   </article>
 </BaseLayout>
