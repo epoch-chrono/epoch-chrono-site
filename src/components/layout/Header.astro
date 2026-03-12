@@ -15,8 +15,15 @@ const currentPath = Astro.url.pathname;
   <nav class="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
     <a
       href="/"
-      class="font-mono text-sm text-[#00c8e0] hover:text-[#e8edf7] transition-colors"
+      class="flex items-center gap-2 font-mono text-sm text-[#00c8e0] hover:text-[#e8edf7] transition-colors group"
     >
+      <img
+        src="/favicon.svg"
+        alt="Epoch"
+        width="20"
+        height="20"
+        class="opacity-80 group-hover:opacity-100 transition-opacity"
+      />
       epoch-chrono
     </a>
 
