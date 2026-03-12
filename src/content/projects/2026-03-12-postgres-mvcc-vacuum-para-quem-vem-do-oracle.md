@@ -9,6 +9,7 @@ tags:
   - mvcc
   - vacuum
   - database-internals
+  - study
 categories:
   - engineering
 postVersion: "1.0.0"

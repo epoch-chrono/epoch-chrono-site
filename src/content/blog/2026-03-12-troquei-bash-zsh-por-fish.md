@@ -111,6 +111,7 @@ end
 ```
 
 Dois detalhes que vão te enlouquecer:
+
 1. Sem `then`. Sem `fi`. Usa `end`.
 2. Sem `[[ ]]` nem `[ ]`. Usa `test` ou a forma longa.
 
@@ -343,7 +344,7 @@ Depois de uma semana você não consegue mais usar bash no terminal sem sentir q
 ## Resumo da migração
 
 | Bash/Zsh | Fish |
-|---|---|
+| --- | --- |
 | `export VAR=valor` | `set -x var valor` |
 | `VAR=$(comando)` | `set var (comando)` |
 | `${VAR}` | `$var` |
