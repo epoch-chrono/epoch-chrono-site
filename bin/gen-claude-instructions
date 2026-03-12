@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+# bin/gen-claude-instructions
+# v1.0.0
+#
+# Gera .mind/PROJECT_INSTRUCTIONS.claude.md a partir de:
+#   - .mind/PROJECT_INSTRUCTIONS.md  (template com placeholders)
+#   - .envrc                          (valores reais das credenciais)
+#
+# Uso:
+#   ./bin/gen-claude-instructions
+#   ./bin/gen-claude-instructions --dry-run   # imprime na stdout sem gravar
+#
+# Adicione ao PATH via .envrc:
+#   PATH_add bin
+
+import re
+import sys
+from pathlib import Path
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+
+REPO_ROOT   = Path(__file__).resolve().parent.parent
+ENVRC       = REPO_ROOT / ".envrc"
+TEMPLATE    = REPO_ROOT / ".mind" / "PROJECT_INSTRUCTIONS.md"
+OUTPUT      = REPO_ROOT / ".mind" / "PROJECT_INSTRUCTIONS.claude.md"
+
+DRY_RUN     = "--dry-run" in sys.argv
+
+# ── Parse .envrc ──────────────────────────────────────────────────────────────
+
+def parse_envrc(path: Path) -> dict[str, str]:
+    """Extrai export VARNAME='VALUE' do .envrc — ignora linhas sem valor."""
+    env = {}
+    pattern = re.compile(r"""^export\s+(\w+)=['"]?([^'"#\n]*)['"]?""")
+    # Mais preciso: captura valor entre aspas simples ou duplas
+    pattern_quoted = re.compile(r"""^export\s+(\w+)='([^']*)'""")
+    pattern_dquoted = re.compile(r'^export\s+(\w+)="([^"]*)"')
+    pattern_bare = re.compile(r"""^export\s+(\w+)=([^'"\s#][^\s#]*)""")
+
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        for pat in (pattern_quoted, pattern_dquoted, pattern_bare):
+            m = pat.match(line)
+            if m:
+                key, val = m.group(1), m.group(2)
+                if val:  # ignora vazios
+                    env[key] = val
+                break
+    return env
+
+# ── Process template ──────────────────────────────────────────────────────────
+
+def process_template(template: Path, env: dict[str, str]) -> str:
+    lines = template.read_text().splitlines()
+    out = []
+
+    # Substitui header público pelo header com aviso de credenciais
+    header_replaced = False
+
+    for line in lines:
+        # Troca título
+        if not header_replaced and line.startswith("# Instruções do projeto epoch-chrono"):
+            out.append("# Instruções do projeto epoch-chrono — Claude (com credenciais)")
+            header_replaced = True
+            continue
+
+        # Remove nota de versão pública (próximas 2 linhas após o título)
+        if "> Versão completa com credenciais" in line:
+            out.append("> **Este arquivo contém credenciais reais. Nunca commitar. Está no `.gitignore`.**")
+            out.append("> Versão pública (sem segredos): `.mind/PROJECT_INSTRUCTIONS.md` no repo.")
+            continue
+        if "> Ver `.envrc.example`" in line:
+            continue  # remove linha de exemplo
+
+        # Substitui linhas do tipo: VARNAME=        # ver .envrc
+        m = re.match(r'^(\s*)(\w+)=\s*#\s*ver \.envrc\s*$', line)
+        if m:
+            indent, varname = m.group(1), m.group(2)
+            if varname in env:
+                out.append(f"{indent}{varname}='{env[varname]}'")
+            else:
+                out.append(line)  # mantém placeholder se var não encontrada
+            continue
+
+        out.append(line)
+
+    return "\n".join(out) + "\n"
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    if not ENVRC.exists():
+        print(f"Erro: {ENVRC} não encontrado.", file=sys.stderr)
+        sys.exit(1)
+    if not TEMPLATE.exists():
+        print(f"Erro: {TEMPLATE} não encontrado.", file=sys.stderr)
+        sys.exit(1)
+
+    env = parse_envrc(ENVRC)
+    result = process_template(TEMPLATE, env)
+
+    if DRY_RUN:
+        print(result)
+        return
+
+    OUTPUT.write_text(result)
+    print(f"✅ Gerado: {OUTPUT.relative_to(REPO_ROOT)}")
+    print(f"   Variáveis injetadas: {len(env)}")
+    print(f"   Agora upe o arquivo nas instruções do projeto no claude.ai")
+
+if __name__ == "__main__":
+    main()

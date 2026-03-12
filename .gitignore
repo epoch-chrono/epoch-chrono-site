@@ -44,6 +44,8 @@ pnpm-debug.log*
 
 # Claude App — contém credenciais
 .mind/PROJECT_INSTRUCTIONS.claude.md
+.mind/HANDOVER.md
+.mind/tmp/
 
 # Mise local overrides
 .mise.local.toml

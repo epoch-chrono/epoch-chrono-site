@@ -134,7 +134,7 @@ Add, remove or rename categories using headings and lists:
 - Helix
 - Fish shell
 - Ghostty
-- tmux
+- zellij
 ```
 
 ---
@@ -184,6 +184,172 @@ gh pr merge <number> --merge --delete-branch
 ```
 
 Commit types: `feat`, `fix`, `content`, `chore`, `docs`.
+
+## Session continuity
+
+This project uses a protocol to preserve context between Claude sessions. State is stored in `.mind/HANDOVER.md` (gitignored — never committed).
+
+See [`.mind/CONTINUIDADE.md`](.mind/CONTINUIDADE.md) for the full protocol and specs in [`.mind/commands/`](.mind/commands/).
+
+### Modes of operation
+
+**With Desktop Commander** (local session — extension active):
+
+- Files read directly via `read_file(/Users/maxter/Git/OpenCodeSpace/personal/epoch-chrono-site/.mind/<file>)`
+- Commands executed via `start_process`
+- Credentials available at runtime via `.envrc`
+
+**Without Desktop Commander** (claude.ai web, no extension):
+
+- Artifacts fetched via `web_fetch` on raw GitHub URLs
+- Repo is public — no authentication needed
+- No cloning required — `.mind/` files are read directly via raw URL
+- Entry point: `web_fetch(https://raw.githubusercontent.com/epoch-chrono/epoch-chrono-site/main/.mind/CONTEXT.md)`
+
+### Reading context on demand
+
+Most `.mind/` docs are fetched live from the repo when needed. Examples of how to request them at the start of a conversation:
+
+```text
+leia o design system do projeto
+→ web_fetch: .mind/DESIGN_SYSTEM.md
+
+vou criar um novo post, leia as convenções de conteúdo
+→ web_fetch: .mind/CONTENT_CONVENTIONS.md
+
+quero publicar um post, leia o writing workflow
+→ web_fetch: .mind/WRITING_WORKFLOW.md
+
+vou mexer em componentes, leia a estrutura de pastas
+→ web_fetch: .mind/FOLDER_STRUCTURE.md
+
+qual o protocolo de sessão? leia o CONTEXT.md
+→ web_fetch: .mind/CONTEXT.md
+```
+
+All URLs are in [`.mind/CONTEXT.md`](.mind/CONTEXT.md).
+
+---
+
+### `[mind-read]` — início de sessão
+
+Use sempre ao iniciar uma conversa nova para verificar se há contexto acumulado de sessões anteriores.
+
+```text
+[mind-read]
+```
+
+**Quando usar:**
+
+- Toda vez que iniciar uma nova conversa sobre o projeto
+- Antes de retomar trabalho interrompido
+- Para saber de onde parou sem precisar re-explicar
+
+**Output:** resumo do `HANDOVER.md` ativo, ou aviso de que não há workflow em curso.
+
+---
+
+### `[mind-save]` — checkpoint intermediário
+
+Persiste o estado atual da sessão em `.mind/HANDOVER.md`. Acumula contexto — cada save faz append, nunca sobrescreve.
+
+```text
+[mind-save]
+```
+
+**Quando usar:**
+
+- Após um PR ser mergeado
+- Após uma decisão técnica ou arquitetural relevante
+- Ao pausar o trabalho no meio de uma feature
+- Antes de mudar de assunto dentro da mesma sessão
+
+**Exemplo de situação:**
+
+```text
+# mergeou PR #12, vai continuar depois
+[mind-save]
+# → salva: o que foi feito, PR mergeado, próximo passo pendente
+```
+
+---
+
+### `[mind-snapshot]` — encerramento de sessão
+
+Gera um artefato completo de handoff com git log, decisões, riscos e próximos passos priorizados. Apaga o `HANDOVER.md` ao final — o snapshot o substitui.
+
+```text
+[mind-snapshot]
+```
+
+**Quando usar:**
+
+- Ao encerrar uma sessão de trabalho
+- Quando o contexto acumulado precisa ser consolidado antes de continuar amanhã
+- Ao final de um ciclo maior (ex: feature completa, refactor, sprint)
+
+**Exemplo de situação:**
+
+```text
+# fim do dia, trabalho em andamento
+[mind-snapshot]
+# → gera snapshot estruturado com tudo
+# → deleta HANDOVER.md
+# → na próxima sessão: [mind-read] carrega o snapshot
+```
+
+---
+
+### `[mind-clear]` — encerramento de ciclo
+
+Limpa o workflow ativo. Usar apenas quando o ciclo de trabalho está realmente concluído e o snapshot já foi gerado.
+
+```text
+[mind-clear]
+```
+
+**Quando usar:**
+
+- Após `[mind-snapshot]`, quando o trabalho está 100% concluído
+- Para resetar o estado antes de iniciar um ciclo novo e não relacionado
+
+**Fluxo correto:**
+
+```text
+[mind-snapshot]   ← consolida tudo
+      ↓
+[mind-clear]      ← limpa estado ativo
+      ↓
+nova sessão → [mind-read] → "sem workflow ativo"
+```
+
+> Nunca usar `[mind-clear]` sem antes rodar `[mind-snapshot]`, a menos que o trabalho não precise de continuidade.
+
+---
+
+## AI context sync
+
+Most `.mind/` files are read on demand via raw GitHub URLs — no manual upload needed.
+Only two files require manual sync with claude.ai:
+
+| File | Target | When to re-upload |
+| :--- | :----- | :---------------- |
+| `.mind/PROJECT_INSTRUCTIONS.claude.md` | Project Instructions | After running `gen-claude-instructions` (instructions or `.envrc` changed) |
+| `.mind/CONTEXT.md` | Project Knowledge | When a new `.mind/` file is created |
+
+To regenerate `PROJECT_INSTRUCTIONS.claude.md` from source:
+
+```sh
+gen-claude-instructions        # requires PATH_add bin in .envrc
+# or
+./bin/gen-claude-instructions
+```
+
+> `PROJECT_INSTRUCTIONS.claude.md` is gitignored (contains credentials).
+> `PROJECT_INSTRUCTIONS.md` is the canonical source — edit this, never the generated file.
+> All other `.mind/` files are fetched live via URLs in [`.mind/CONTEXT.md`](.mind/CONTEXT.md).
+
+---
 
 ## License
 

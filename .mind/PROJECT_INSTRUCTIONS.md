@@ -28,6 +28,48 @@ Documentos complementares (em `.mind/`):
 - [`WRITING_WORKFLOW.md`](./.mind/WRITING_WORKFLOW.md) — drafts, publicação, newsletter
 - [`DESIGN_SYSTEM.md`](./.mind/DESIGN_SYSTEM.md) — paleta, tipografia, componentes, favicon
 
+## Contexto e artefatos do projeto
+
+Os documentos `.mind/` **não são carregados automaticamente** — são buscados sob demanda via `web_fetch` quando necessário.
+
+O ponto de entrada é o mapa de contexto:
+
+```text
+web_fetch(https://raw.githubusercontent.com/epoch-chrono/epoch-chrono-site/main/.mind/CONTEXT.md)
+```
+
+Esse arquivo lista todos os artefatos disponíveis com suas URLs e indica quando cada um deve ser buscado.
+
+### Modos de operação
+
+**Com Desktop Commander disponível** (sessão local):
+
+- Leitura direta de arquivos: `read_file(/Users/maxter/Git/OpenCodeSpace/personal/epoch-chrono-site/.mind/<arquivo>)`
+- Execução de comandos no projeto via `start_process`
+- Acesso ao `.envrc` e credenciais em runtime
+
+**Sem Desktop Commander (web / claude.ai sem extensão)**:
+
+- Buscar artefatos via `web_fetch` nas URLs raw do GitHub
+- Repo público — nenhuma autenticação necessária
+- Clonagem de repo não é necessária — leitura é feita diretamente via URL raw
+
+### Protocolo de sessão
+
+Ao iniciar qualquer sessão de trabalho no projeto, verificar estado acumulado:
+
+```text
+[mind-read]
+```
+
+Ao encerrar:
+
+```text
+[mind-snapshot]
+```
+
+Specs completas dos comandos `[mind-*]` em `.mind/commands/` — buscar via CONTEXT.md se necessário.
+
 ## Variables
 
 > Valores reais definidos em `.envrc` (não commitado).

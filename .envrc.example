@@ -14,7 +14,6 @@ export GITHUB_ORG='epoch-chrono-com'
 export GITHUB_USER='epoch-chrono'
 export GITHUB_REPO='https://github.com/epoch-chrono/epoch-chrono-site'
 
-
 # === Deploy - Vercel === #
 export VERCEL_API_TOKEN='vcp_...'
 export VERCEL_PROJECT='epoch-chrono'
@@ -40,3 +39,6 @@ export GITHUB_API_TOKEN='ghp_23...'
 
 # === OnePassword === #
 export SSH_AUTH_SOCK=''
+
+# === Path === #
+export PATH="$PWD/bin:$PATH"
