@@ -329,13 +329,15 @@ nova sessão → [mind-read] → "sem workflow ativo"
 
 ## AI context sync
 
-Most `.mind/` files are read on demand via raw GitHub URLs — no manual upload needed.
-Only two files require manual sync with claude.ai:
+This project uses the **claude.ai GitHub connector** — all repo files are synced automatically on every push.
+
+Only one file requires manual upload (contains credentials, gitignored):
 
 | File | Target | When to re-upload |
 | :--- | :----- | :---------------- |
 | `.mind/PROJECT_INSTRUCTIONS.claude.md` | Project Instructions | After running `gen-claude-instructions` (instructions or `.envrc` changed) |
-| `.mind/CONTEXT.md` | Project Knowledge | When a new `.mind/` file is created |
+
+Everything else (including all `.mind/` files) is kept in sync automatically via the GitHub connector.
 
 To regenerate `PROJECT_INSTRUCTIONS.claude.md` from source:
 
@@ -347,7 +349,6 @@ gen-claude-instructions        # requires PATH_add bin in .envrc
 
 > `PROJECT_INSTRUCTIONS.claude.md` is gitignored (contains credentials).
 > `PROJECT_INSTRUCTIONS.md` is the canonical source — edit this, never the generated file.
-> All other `.mind/` files are fetched live via URLs in [`.mind/CONTEXT.md`](.mind/CONTEXT.md).
 
 ---
 
