@@ -9,8 +9,9 @@ Gera .mind/PROJECT_INSTRUCTIONS.claude.md a partir de:
 Também regera .envrc.example mascarando secrets longos.
 
 Uso:
-  gen-claude-instructions          # gera e imprime no stdout
-  gen-claude-instructions --dry    # só imprime, não salva arquivos
+  gen-claude-instructions            # gera e imprime no stdout
+  gen-claude-instructions --dry      # só imprime, não salva arquivos
+  gen-claude-instructions --dry-run  # idem (alias)
 """
 
 import re
@@ -28,7 +29,7 @@ OUT_EXAMPLE = ROOT / ".envrc.example"
 
 BEGIN_MARKER = "<!-- BEGIN_VARIABLES -->"
 
-DRY_RUN = "--dry" in sys.argv
+DRY_RUN = any(a in ("--dry", "--dry-run") for a in sys.argv[1:])
 
 # ---------------------------------------------------------------------------
 # Helpers
