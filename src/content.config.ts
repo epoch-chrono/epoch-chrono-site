@@ -19,6 +19,7 @@ const blog = defineCollection({
       })
       .optional(),
     canonical: z.string().url().optional(),
+    postVersion: z.string().optional(),  // semver ex: "1.0.0"
   }),
 });
 
@@ -43,6 +44,7 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     pubDate: z.coerce.date(),
+    postVersion: z.string().optional(),  // semver ex: "1.0.0"
   }),
 });
 

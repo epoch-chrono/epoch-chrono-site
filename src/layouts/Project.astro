@@ -9,9 +9,10 @@ interface Props {
   repo?: string;
   demo?: string;
   tags?: string[];
+  postVersion?: string;
 }
 
-const { title, description, status, repo, demo, tags = [] } = Astro.props;
+const { title, description, status, repo, demo, tags = [], postVersion } = Astro.props;
 
 const statusConfig = {
   active:   { label: 'active',   classes: 'text-[#00e896] border-[#00e896]/30 bg-[#00e896]/10' },
@@ -66,5 +67,11 @@ const st = statusConfig[status];
                 prose-pre:bg-[#0f1629] prose-pre:border prose-pre:border-[#1e2d4a]">
       <slot />
     </div>
+
+    {postVersion && (
+      <footer class="mt-12 pt-4 border-t border-[#1e2d4a]">
+        <span class="font-mono text-xs text-[#4a607f]">post v{postVersion}</span>
+      </footer>
+    )}
   </article>
 </BaseLayout>

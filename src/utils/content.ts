@@ -1,25 +1,39 @@
 // src/utils/content.ts — helpers para content collections
 import { getCollection } from 'astro:content';
 
-/** Retorna posts de blog publicados, ordenados do mais recente. */
+const now = () => new Date();
+
+/** Retorna posts de blog publicados e com pubDate <= hoje, ordenados do mais recente. */
 export async function getPublishedPosts() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft).catch(() => []);
+  const today = now();
+  const posts = await getCollection(
+    'blog',
+    ({ data }) => !data.draft && data.pubDate <= today,
+  ).catch(() => []);
   return posts.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );
 }
 
-/** Retorna TILs publicados, ordenados do mais recente. */
+/** Retorna TILs publicados e com pubDate <= hoje, ordenados do mais recente. */
 export async function getPublishedTils() {
-  const tils = await getCollection('til', ({ data }) => !data.draft);
+  const today = now();
+  const tils = await getCollection(
+    'til',
+    ({ data }) => !data.draft && data.pubDate <= today,
+  ).catch(() => []);
   return tils.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );
 }
 
-/** Retorna projects, ordenados por featured e depois por data. */
+/** Retorna projects com pubDate <= hoje, ordenados por featured e depois por data. */
 export async function getProjects() {
-  const projects = await getCollection('projects').catch(() => []);
+  const today = now();
+  const projects = await getCollection(
+    'projects',
+    ({ data }) => data.pubDate <= today,
+  ).catch(() => []);
   return projects.sort((a, b) => {
     if (a.data.featured && !b.data.featured) return -1;
     if (!a.data.featured && b.data.featured) return 1;

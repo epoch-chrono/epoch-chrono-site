@@ -14,6 +14,7 @@ interface Props {
   lang?: string;
   canonical?: string;
   rawContent?: string;
+  postVersion?: string;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   lang = 'pt-BR',
   canonical,
   rawContent = '',
+  postVersion,
 } = Astro.props;
 
 const mins = readingTime(rawContent);
@@ -71,5 +73,11 @@ const mins = readingTime(rawContent);
                 prose-blockquote:border-l-[#00c8e0] prose-blockquote:text-[#8fa3c8]">
       <slot />
     </div>
+
+    {postVersion && (
+      <footer class="mt-12 pt-4 border-t border-[#1e2d4a]">
+        <span class="font-mono text-xs text-[#4a607f]">post v{postVersion}</span>
+      </footer>
+    )}
   </article>
 </BaseLayout>

@@ -1,0 +1,16 @@
+name: Scheduled deploy
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 08:00 BRT (UTC-3)
+  workflow_dispatch:       # permite trigger manual
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel deploy
+        run: |
+          curl -s -X POST \
+            "https://api.vercel.com/v1/integrations/deploy/prj_AH5xZgvkO7TOAm2Z3CbaxlOKamcF/kI2liMLLYY" \
+            --fail
