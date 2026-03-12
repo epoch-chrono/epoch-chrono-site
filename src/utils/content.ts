@@ -1,7 +1,9 @@
 // src/utils/content.ts — helpers para content collections
 import { getCollection } from 'astro:content';
 
-const now = () => new Date();
+// Em modo local (SHOW_ALL=true), usa data futura para bypassar filtro de pubDate.
+const now = () =>
+  import.meta.env.SHOW_ALL ? new Date('2099-12-31') : new Date();
 
 /** Retorna posts de blog publicados e com pubDate <= hoje, ordenados do mais recente. */
 export async function getPublishedPosts() {
