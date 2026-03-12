@@ -1,7 +1,7 @@
 ---
 title: "VACUUM não é o que você pensa — e autovacuum vai te trair em produção"
 description: "Day 2 do prep Upwork: VACUUM, autovacuum, Visibility Map, XID wraparound e WAL archiving. Com o bônus do cenário que fez um banco congelar 24h depois de uma mudança que 'deu certo'."
-pubDate: 2026-03-13T11:00:00-03:00
+pubDate: 2026-03-13T08:00:00-03:00
 lang: "pt-BR"
 draft: false
 tags:
