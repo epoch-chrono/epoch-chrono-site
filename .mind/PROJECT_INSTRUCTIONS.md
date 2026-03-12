@@ -107,6 +107,9 @@ NOTION_BASE_PAGE='https://www.notion.so/epoch-chrono/epoch-chrono-com-site-32049
 # GitHub (org epoch-chrono — para Actions, releases, gists)
 GITHUB_API_TOKEN=        # ver .envrc
 
+# Stackshare
+STACKSHARE_API_TOKEN=    # ver .envrc
+
 # === OnePassword === #
 export SSH_AUTH_SOCK=''
 ```
