@@ -4,6 +4,7 @@ import '../../styles/global.css';
 import SEO from '../common/SEO.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import { SpeedInsights } from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -40,5 +41,6 @@ const {
       <slot />
     </main>
     <Footer />
+    <SpeedInsights />
   </body>
 </html>
