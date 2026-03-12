@@ -2,6 +2,7 @@ commitizen
 cz-conventional-changelog
 @commitlint/cli
 @commitlint/config-conventional
+@commitlint/cz-commitlint
 markdownlint-cli
 prettier
 npm-check-updates
