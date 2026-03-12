@@ -46,33 +46,48 @@ const {
     <Analytics />
 
     <script>
-      // easter egg: digitar "lavos" em qualquer página redireciona para /battle
       (() => {
+        const BATTLE_URL = '/battle';
+
+        // --- desktop: digitar "lavos" ---
         const secret = 'lavos';
         let buffer = '';
         let timer: ReturnType<typeof setTimeout>;
 
         document.addEventListener('keydown', (e) => {
-          // ignora se foco está em input/textarea
           const tag = (e.target as HTMLElement).tagName;
           if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 
           buffer += e.key.toLowerCase();
-
-          // janela de 1.5s para completar a sequência
           clearTimeout(timer);
           timer = setTimeout(() => { buffer = ''; }, 1500);
 
-          // mantém só o sufixo relevante
           if (buffer.length > secret.length) {
             buffer = buffer.slice(-secret.length);
           }
 
           if (buffer === secret) {
             buffer = '';
-            window.location.href = '/battle';
+            window.location.href = BATTLE_URL;
           }
         });
+
+        // --- mobile: long press (1.5s) no logo ---
+        const logo = document.getElementById('site-logo');
+        if (logo) {
+          let pressTimer: ReturnType<typeof setTimeout>;
+
+          logo.addEventListener('touchstart', (e) => {
+            pressTimer = setTimeout(() => {
+              e.preventDefault();
+              window.location.href = BATTLE_URL;
+            }, 1500);
+          }, { passive: false });
+
+          logo.addEventListener('touchend', () => clearTimeout(pressTimer));
+          logo.addEventListener('touchcancel', () => clearTimeout(pressTimer));
+          logo.addEventListener('touchmove', () => clearTimeout(pressTimer));
+        }
       })();
     </script>
   </body>
