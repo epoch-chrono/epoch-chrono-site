@@ -42,3 +42,16 @@ workflow: "<descrição curta do objetivo>"
 - Telegráfico — paths, decisões, status. Sem explicações longas
 - Contexto acumulado: append, nunca replace
 - Criar `.mind/` se não existir
+
+## Output final obrigatório
+
+Após gerar o HANDOVER.md, sempre emitir:
+
+1. **Título sugerido para a conversa** (formato: `{YYYYMMDD-HHmm}-epoch-chrono-{DescricaoCurta}`)
+2. **Prompt de retomada** — pronto para colar em uma nova conversa:
+
+```text
+Projeto epoch-chrono. Retomando sessão anterior.
+Leia o HANDOVER.md e execute [mind-read].
+Próxima tarefa: <próximo passo do HANDOVER>
+```

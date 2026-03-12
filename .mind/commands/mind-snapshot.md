@@ -52,3 +52,16 @@ date: <data ISO BRT>
 - Foco no que é necessário para continuar sem perder contexto
 - Após gerar, deletar `.mind/HANDOVER.md`
 - O snapshot deve ser adicionado manualmente ao projeto no claude.ai se necessário
+
+## Output final obrigatório
+
+Após gerar o snapshot, sempre emitir:
+
+1. **Título sugerido para a conversa** (formato: `{YYYYMMDD-HHmm}-epoch-chrono-{DescricaoCurta}`)
+2. **Prompt de retomada** — pronto para colar em uma nova conversa:
+
+```text
+Projeto epoch-chrono. Retomando após snapshot.
+Execute [mind-read] para carregar contexto.
+Próxima tarefa: <primeiro item de "Próximos passos" do snapshot>
+```
