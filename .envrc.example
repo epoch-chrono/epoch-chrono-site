@@ -47,5 +47,3 @@ export SSH_AUTH_SOCK=''
 
 # === Path === #
 export PATH="$PWD/bin:$PATH"
-
-export SUPER_SEGRED='sakjd...'

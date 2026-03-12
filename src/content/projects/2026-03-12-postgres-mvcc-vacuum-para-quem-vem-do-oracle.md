@@ -146,3 +146,44 @@ Se você saiu de um banco Oracle e está entrando num ambiente Postgres, o mapa 
 VACUUM não é opcional. É parte do funcionamento do banco. Entender quando e por que ele roda é tão importante quanto entender índices.
 
 E `pg_stat_user_tables` é seu amigo. Coloca no dashboard desde o dia um.
+
+---
+
+## Referência rápida — Day 1
+
+```sql
+-- Diagnóstico de bloat
+SELECT relname, n_dead_tup, n_live_tup,
+       round(n_dead_tup::numeric / nullif(n_live_tup,0) * 100, 2) AS dead_pct,
+       last_vacuum, last_autovacuum
+FROM pg_stat_user_tables
+ORDER BY n_dead_tup DESC;
+
+-- VACUUM manual (sem lock em DML)
+VACUUM tablename;
+VACUUM ANALYZE tablename;   -- reclaim + atualiza stats do planejador
+VACUUM FULL tablename;      -- ⚠️ reescreve + encolhe — exclusive lock
+
+-- Verificar visibilidade de uma transação
+SELECT txid_current();
+
+-- Checar xmin/xmax de uma linha (requer cast para tabela específica)
+SELECT xmin, xmax, * FROM tablename WHERE id = 1;
+```
+
+**Mental model em 60 segundos:**
+
+```text
+Connection → Postmaster forks backend
+Backend lê/escreve → Shared Buffers (em memória)
+COMMIT → WAL Writer flushed para disco (durável)
+BGWriter → escreve dirty pages continuamente (performance)
+Checkpointer → flushed tudo (ponto de recovery)
+UPDATE → cria nova versão da linha (xmin = txid atual, xmax = 0)
+         marca versão antiga como morta (xmax = txid atual)
+VACUUM → reclaim espaço das dead tuples (sem shrink)
+VACUUM FULL → reescreve arquivo inteiro (exclusive lock)
+Autovacuum → roda VACUUM automaticamente quando n_dead > threshold
+```
+
+*Day 2: [VACUUM não é o que você pensa — e autovacuum vai te trair em produção](/projects/2026-03-13-postgres-vacuum-autovacuum-wal-archiving)*
