@@ -253,7 +253,7 @@ See [`.mind/CONTINUIDADE.md`](.mind/CONTINUIDADE.md) for the full protocol and s
 
 **With Desktop Commander** (local session — extension active):
 
-- Files read directly via `read_file(/Users/maxter/Git/OpenCodeSpace/personal/epoch-chrono-site/.mind/<file>)`
+- Files read directly via `read_file($HOME/Git/OpenCodeSpace/personal/epoch-chrono-site/.mind/<file>)`
 - Commands executed via `start_process`
 - Credentials available at runtime via `.envrc`
 
