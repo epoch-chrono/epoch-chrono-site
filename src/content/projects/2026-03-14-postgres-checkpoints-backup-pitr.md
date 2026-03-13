@@ -68,7 +68,7 @@ FROM pg_stat_bgwriter;
 **Parâmetros principais:**
 
 | Parâmetro | Default | O que faz |
-|---|---|---|
+| --- | --- | --- |
 | `checkpoint_timeout` | 5min | Trigger por tempo |
 | `max_wal_size` | 1GB | Trigger por volume de WAL |
 | `checkpoint_completion_target` | 0.9 | Spread de I/O — 90% do intervalo |
@@ -188,6 +188,7 @@ restore_command = 'aws s3 cp s3://bucket/wal/%f %p'  # archive → recovery
 **`recovery.signal`** é um arquivo vazio que você cria no data directory. O Postgres detecta a presença dele no startup e entra em recovery mode. É o mecanismo do Postgres 12+ — antes existia `recovery.conf`, que foi descontinuado. A existência de um arquivo de sinal para controlar o modo de operação é... incomum, mas é o que é.
 
 **`recovery_target_action`** define o que acontece quando o replay atinge o target:
+
 - `promote` (mais comum) — promove para primary, aceita writes
 - `pause` — para o replay, deixa em standby read-only para você verificar antes de promover
 - `shutdown` — para o servidor (útil para scripts automatizados)
