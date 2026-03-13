@@ -26,6 +26,8 @@
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
-    "@commitlint/cz-commitlint": "^20.4.4"
+    "@commitlint/cz-commitlint": "^20.4.4",
+    "tmp": "^0.2.4",
+    "lodash": "^4.17.23"
   }
 }

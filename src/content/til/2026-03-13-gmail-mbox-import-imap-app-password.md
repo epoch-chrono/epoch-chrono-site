@@ -1,5 +1,5 @@
 ---
-title: "TIL: Importar MBOX do Google Takeout no Gmail free via IMAP + App Password"
+title: "TIL (Today I Learned): Importar MBOX do Google Takeout no Gmail free via IMAP + App Password"
 pubDate: 2026-03-13
 tags:
   - gmail
