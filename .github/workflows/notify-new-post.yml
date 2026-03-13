@@ -6,6 +6,9 @@ on:
     types: [completed]
   workflow_dispatch:  # trigger manual para testes
 
+permissions:
+  contents: read
+
 jobs:
   notify:
     runs-on: ubuntu-latest
